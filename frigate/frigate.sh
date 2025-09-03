@@ -9,3 +9,13 @@ fi
 
 
 # storage directory should exist for frigate
+if (stat storage)
+then
+  echo 'storage directory already exists'
+else
+  echo 'creating storage directory'
+  mkdir storage
+fi
+
+
+
