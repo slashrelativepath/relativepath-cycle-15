@@ -4,11 +4,7 @@ to run frigate:
 docker compose up -d
 ```
 
-to get frigate password:
+to get frigate password and URL:
 ```shell
-sudo docker ps
-sudo docker logs 896a36a18efa
+echo "Your password is: $(sudo docker logs frigate | grep -i 'password:' | awk '{print $10}') and your frigate URL is at: https://$(hostname -I | awk '{print $1}'):8971"
 ```
-use the sha from the frigate running container
-
-find the password in the log
