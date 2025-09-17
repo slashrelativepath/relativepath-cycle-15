@@ -1,0 +1,39 @@
+mqtt:
+  enabled: false
+
+cameras:
+  hikvision: # <------ Name the camera
+    enabled: true
+    ffmpeg:
+      inputs:
+        - path: rtsp://admin:Password123@192.168.1.3:554/streaming/channels/101 # <----- The stream you want to use for detection
+          roles:
+            - detect
+            - record
+detect:
+  enabled: true
+version: 0.16-0
+detectors:
+  ov_0:
+    type: openvino
+    device: GPU
+model:
+  width: 300
+  height: 300
+  input_tensor: nhwc
+  input_pixel_format: bgr
+  path: /openvino-model/ssdlite_mobilenet_v2.xml
+  labelmap_path: /openvino-model/coco_91cl_bkgr.txt
+record:
+  enabled: True
+  retain:
+    days: 3
+    mode: all
+  alerts:
+    retain:
+      days: 30
+      mode: motion
+  detections:
+    retain:
+      days: 30
+      mode: motion
