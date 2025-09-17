@@ -17,5 +17,12 @@ else
   mkdir storage
 fi
 
-
+# intel gpu tool should be installed
+if (dpkg -s intel-gpu-tools)
+then 
+  echo 'intel-gpu-tools is already installed'
+else
+  echo 'installing intel-gpu-tools'
+  sudo apt install -y intel-gpu-tools
+fi
 
