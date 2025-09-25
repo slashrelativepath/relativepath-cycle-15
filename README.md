@@ -1,15 +1,31 @@
 # Relative Path Cycle 15
 
+## Starting fresh
+To wipe a previous VM, or to ensure a clean start, run the following:
+```shell
+$SHELL delete-vm.sh
+```
 
-## tailscale
-create vm and install tailscale, transfer script and ssh 
-`$SHELL create-vm.sh && multipass transfer tailscale-install.sh relativepath: && multipass shell relativepath`
+## VM Creation
+create vm script will transfer tailscale script an frigate folder
+```shell
+$SHELL create-vm.sh
+```
 
-delete vm
-`$SHELL delete-vm.sh`
+## Inside the vm
+Drop into a shell inside the VM using the following command:
+```shell
+multipass shell relativepath
+````
+Next we'll install docker and frigate, which we have scripts for.
 
-## frigate
-``` shell
-$SHELL create-vm.sh && multipass transfer -r frigate relativepath: && multipass shell relativepath
+This will install docker and docker-compose
+```shell
+$SHELL frigate/docker.sh
+```
+
+And then ensure all of the dependencies are installed so frigate can be launched via docker.
+```shell
+$SHELL frigate/frigate.sh
 ```
 

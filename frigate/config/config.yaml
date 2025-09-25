@@ -1,29 +1,41 @@
+# yaml-language-server: $schema=http://frigate_host:5000/api/config/schema.json
+version: 0.16-0
+
 mqtt:
   enabled: false
 
 cameras:
-  hikvision: # <------ Name the camera
+  reolink:
     enabled: true
     ffmpeg:
       inputs:
-        - path: rtsp://admin:Password123@192.168.1.3:554/streaming/channels/101 # <----- The stream you want to use for detection
+        - path: rtsp://frigate:{FRIGATE_RTSP_PASSWORD}@192.168.1.180:554/h264Preview_01_main
           roles:
             - detect
             - record
+      # tcp seems to cut down on artifacts (verified packets)
+      input_args:
+        -rtsp_transport tcp
+
 detect:
   enabled: true
-version: 0.16-0
+
+# nvidia detector & model
 detectors:
-  ov_0:
-    type: openvino
-    device: GPU
+  onnx_0:
+    type: onnx
+
+# built from this notebook
+# https://colab.research.google.com/github/blakeblackshear/frigate/blob/dev/notebooks/YOLO_NAS_Pretrained_Export.ipynb
 model:
-  width: 300
-  height: 300
-  input_tensor: nhwc
+  model_type: yolonas
+  width: 480
+  height: 640
   input_pixel_format: bgr
-  path: /openvino-model/ssdlite_mobilenet_v2.xml
-  labelmap_path: /openvino-model/coco_91cl_bkgr.txt
+  input_tensor: nchw
+  path: /config/yolo_nas_s.onnx
+  labelmap_path: /labelmap/coco-80.txt
+
 record:
   enabled: True
   retain:
