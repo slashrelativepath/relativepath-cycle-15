@@ -1,25 +1,26 @@
 services:
   frigate:
     container_name: frigate
-    privileged: true # this may not be necessary for all setups
+    privileged: true
     restart: unless-stopped
-    stop_grace_period: 30s # allow enough time to shut down the various services
+    stop_grace_period: 30s
     image: ghcr.io/blakeblackshear/frigate:stable
-    shm_size: "512mb" # update for your cameras based on calculation above
+    shm_size: "512mb"
     devices:
       - /dev/dri:/dev/dri
     volumes:
       - ./config:/config
       - ./storage:/media/frigate
-      - type: tmpfs # Optional: 1GB of memory, reduces SSD/SD Card wear
+      - type: tmpfs
         target: /tmp/cache
         tmpfs:
           size: 1000000000
     ports:
       - "8971:8971"
-      # - "5000:5000" # Internal unauthenticated access. Expose carefully.
-      - "8554:8554" # RTSP feeds
-      - "8555:8555/tcp" # WebRTC over tcp
-      - "8555:8555/udp" # WebRTC over udp
-    environment:
-      FRIGATE_RTSP_PASSWORD: "Password123"
+      - "8554:8554"
+      - "8555:8555/tcp"
+      - "8555:8555/udp"
+
+    # Load environment variables from .env (FRIGATE_RTSP_USER, FRIGATE_RTSP_PASSWORD)
+    env_file:
+      - .env
